@@ -42,8 +42,12 @@ def watermark(input_str, output_len = 20, method = "hard", gamma = 0.5, delta = 
     return input_str
 
 def main():
-    input = "My favorite president is Barack"
-    print(watermark(input, method = "hard"))
+    # tokenizer = GPT2Tokenizer.from_pretrained("gpt2")
+    # model = GPT2LMHeadModel.from_pretrained("gpt2")
+    # inputs = tokenizer("Recently, scientists have discovered", return_tensors="pt")
+    # generation_output = model.generate(**inputs, max_new_tokens = 20, return_dict_in_generate=True, output_scores=True)
+    # print(tokenizer.decode(generation_output[0][0]))
+    print(watermark(input, method = "none"))
 
 if __name__ == "__main__":
     main()

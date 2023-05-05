@@ -18,6 +18,9 @@ def detect_watermark(input_str, prompt_len, seed, gamma):
     return True
 
 def main():
+    hard = "Recently, scientists have discovered that obesity by itself may not be a contributing cause of heart problem. Infants' obesity generating lip"
+    soft = "Recently, scientists have discovered that smoking in childhood doesn't plummet after birth by any means, but it has a profound impact on"
+    none = "Recently, scientists have discovered that the brain's ability to process information is impaired when it is exposed to a high-energy source"
     detect_watermark("Hello, my name is hairy fish and I like water.")
 
 if __name__ == "__main__":
