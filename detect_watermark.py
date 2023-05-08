@@ -1,4 +1,4 @@
-from transformers import GPT2Tokenizer, GPT2LMHeadModel
+from transformers import GPT2Tokenizer
 import numpy as np
 import random
 import scipy.stats as st
@@ -10,7 +10,7 @@ def primitive_detect_watermark(input_str, prompt_len, seed, gamma):
     tokens = inputs['input_ids'][0]
 
     for i in range(prompt_len - 1, len(tokens)):
-        random.seed(seed + tokens[i])
+        random.seed(seed + tokens[i].item())
     
         for i in range(tokens[i + 1] + 1):
             is_red = random.random() > gamma
@@ -30,8 +30,8 @@ def fancy_detect_watermark(input_str, prompt_len, seed, gamma):
     green_count = 0
     total_count = len(tokens) - prompt_len
 
-    for i in range(prompt_len - 1, len(tokens)):
-        random.seed(seed + tokens[i])
+    for i in range(prompt_len - 1, len(tokens) - 1):
+        random.seed(seed + tokens[i].item())
     
         for i in range(tokens[i + 1] + 1):
             is_red = random.random() > gamma
@@ -48,13 +48,14 @@ def main():
     hard = "Recently, scientists have discovered that obesity by itself may not be a contributing cause of heart problem. Infants' obesity generating lip"
     soft = "Recently, scientists have discovered that smoking in childhood doesn't plummet after birth by any means, but it has a profound impact on"
     none = "Recently, scientists have discovered that the brain's ability to process information is impaired when it is exposed to a high-energy source"
-    primitive_detect_watermark(hard)
-    primitive_detect_watermark(soft) # might say it's not watermarked -- that's expected behavior
-    primitive_detect_watermark(none)
+    prompt_len = 6
+    primitive_detect_watermark(hard, prompt_len, seed = 1729, gamma = 0.5)
+    primitive_detect_watermark(soft, prompt_len, seed = 1729, gamma = 0.5) # might say it's not watermarked -- that's expected behavior
+    primitive_detect_watermark(none, prompt_len, seed = 1729, gamma = 0.5)
 
-    fancy_detect_watermark(hard)
-    fancy_detect_watermark(soft)
-    fancy_detect_watermark(none)
+    fancy_detect_watermark(hard, prompt_len, seed = 1729, gamma = 0.5)
+    fancy_detect_watermark(soft, prompt_len, seed = 1729, gamma = 0.5)
+    fancy_detect_watermark(none, prompt_len, seed = 1729, gamma = 0.5)
     
     
 
