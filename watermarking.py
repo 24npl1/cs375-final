@@ -4,7 +4,7 @@ import random
 
 def redlist(tensor, method, gamma, delta, seed):
     scores = tensor[1][0][0]
-    last_tok = tensor[0][0][-1]
+    last_tok = tensor[0][0][-2]
     last_tok = last_tok.item()
     random.seed(last_tok + seed)
 
@@ -42,12 +42,13 @@ def watermark(input_str, output_len = 20, method = "hard", gamma = 0.5, delta = 
     return input_str
 
 def main():
-    # tokenizer = GPT2Tokenizer.from_pretrained("gpt2")
-    # model = GPT2LMHeadModel.from_pretrained("gpt2")
-    # inputs = tokenizer("Recently, scientists have discovered", return_tensors="pt")
-    # generation_output = model.generate(**inputs, max_new_tokens = 20, return_dict_in_generate=True, output_scores=True)
-    # print(tokenizer.decode(generation_output[0][0]))
-    print(watermark(input, method = "none"))
+    tokenizer = GPT2Tokenizer.from_pretrained("gpt2")
+    model = GPT2LMHeadModel.from_pretrained("gpt2")
+    inputs = tokenizer("Williams collge is a", return_tensors="pt")
+    print(inputs['input_ids'][0][:3])
+    generation_output = model.generate(**inputs, max_new_tokens = 20, return_dict_in_generate=True, output_scores=True)
+    print(tokenizer.decode(generation_output[0][0]))
+    #print(watermark("Recently, scientists have discovered", method = "soft", delta=10))
 
 if __name__ == "__main__":
     main()
