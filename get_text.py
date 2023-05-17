@@ -34,6 +34,8 @@ def histogram(csv_file_path, Type):
     plt.title(f"Retrieval Probabilites of {Type} text")
     plt.show()
 
+
+
 def generate_csv():
     l = get_random_csv_entries("AGNEWS.csv", 2)
     res = []
@@ -87,8 +89,42 @@ def generate_csv():
         for row in res:
             writer.writerow(row)
 
+def generate_detect(mark = "soft"):
+    res = []
+    l2 = get_random_csv_entries("AGNEWS.csv", 2)
+    for e2 in l2:
+        temp = {}
+        tokenizer = GPT2Tokenizer.from_pretrained("gpt2")
+        inputs = tokenizer(e2, return_tensors="pt")
+        prompt_toks = inputs['input_ids'][0][:5]
+        prompt = tokenizer.decode(prompt_toks)
+        try:
+            e = watermark(prompt, method = mark, delta = 1.4)
+            temp["text"] = e
+            temp["type"] = mark
+            temp["prob"] = fancy_detect_watermark(e, 5, 1729, gamma = 0.5)
+            print(temp["prob"])
+            res.append(temp)
+        except:
+            continue
+    return res
+
+def write_csv(filename, data):
+    with open(filename, 'w', newline='') as csvfile:
+        fieldnames = ["text", "type", "prob"]
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+
+        # Write the header row
+        writer.writeheader()
+
+        # Write the data row
+        for row in data:
+            writer.writerow(row)
+
+
 def main():
-    histogram("results_1.csv", "Hard Watermark")
+    data = generate_detect()
+    write_csv("soft_delta_10.csv", data)
 
 
 if __name__ == "__main__":

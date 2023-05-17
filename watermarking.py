@@ -44,7 +44,7 @@ def watermark(input_str, output_len = 20, method = "hard", gamma = 0.5, delta = 
 def main():
     tokenizer = GPT2Tokenizer.from_pretrained("gpt2")
     model = GPT2LMHeadModel.from_pretrained("gpt2")
-    inputs = tokenizer("Williams collge is a", return_tensors="pt")
+    inputs = tokenizer("Natural Language Processing is", return_tensors="pt")
     print(inputs['input_ids'][0][:3])
     generation_output = model.generate(**inputs, max_new_tokens = 20, return_dict_in_generate=True, output_scores=True)
     print(tokenizer.decode(generation_output[0][0]))
